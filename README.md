@@ -1,146 +1,223 @@
-## 🤖 Discord Bot - Leaderboard & Curses
+# Discord Bot - Leaderboard & Curses
 
-A feature-rich Discord bot with a **points leaderboard system** and **20 unique curse types**!
+A fun Discord bot with a points leaderboard system and customizable "curse" effects for members!
 
-### ✨ Features
+## Features
 
-#### 📊 Leaderboard System
-- **`/leaderboard [limit]`** - View the top players (default: top 10)
-- **`/give-points @member <points>`** - Add points to a member (Admin only)
-- **`/remove-points @member <points>`** - Remove points from a member (Admin only)
-- **`/reset-leaderboard`** - Reset all points to 0 (Admin only, requires confirmation)
-- Persistent SQLite database for all leaderboard data
+### 🏆 Leaderboard System
+- **Add/Remove Points**: Admins can award or deduct points from members
+- **View Leaderboard**: Anyone can view the top players
+- **Reset Leaderboard**: Admins can reset all data
+- **Persistent Storage**: Data saved in SQLite database
 
-#### 🔥 Curse System (20 Unique Curses)
-- **Text Effects**: no_vowels, no_e, reverse, morse_code, pig_latin, alternating_caps, random_caps, double_letter
-- **Word Manipulation**: shuffle, stutter, yoda_speak, pirate_speak, slowmo, bubble_text, mirror
-- **Special Effects**: uppercase, lowercase, robotic, emoji_prefix
-- **Math Curse**: Users must solve addition/multiplication problems to send messages!
+### 🔥 Curse System (20 Types)
 
-**Commands:**
-- **`/curse @member <curse_type> <duration_hours>`** - Apply a curse (Admin only)
-- **`/curses @member`** - View active curses on a user
-- **`/lift-curse @member`** - Remove all curses from a user (Admin only)
+Admins can apply curses to members that modify how their messages appear:
 
-### 🚀 Setup
+**Text Effects:**
+- `no_vowels` - All vowels are removed
+- `no_e` - The letter 'e' cannot be used
+- `reverse` - Messages are reversed
+- `morse_code` - Converts to Morse code
+- `pig_latin` - Converts to Pig Latin
+- `upside_down` - Text is reversed and flipped
+- `backwards_words` - Every word is spelled backwards
 
-1. **Install dependencies:**
+**Word Effects:**
+- `shuffle` - Words have their letters shuffled
+- `stutter` - Every letter is doubled
+- `yoda_speak` - Word order is reversed
+- `pirate_speak` - Speak like a pirate!
+- `spelling_bee` - Every letter is separated
+- `uwu_speak` - R's and L's become W's
+- `doubletalk` - Every word is doubled and reversed
+
+**Special Effects:**
+- `emoji_prefix` - Random emoji added to messages
+- `robotic` - SHOUT LIKE A ROBOT
+- `slowmo` - Words are spelled out letter by letter
+- `random_caps` - Random letters are capitalized
+- `binary_prefix` - Messages have a binary prefix
+- `math_curse` - **Must solve a math problem to send each message!**
+
+**Curse Mechanics:**
+- Auto-expire after specified duration
+- Multiple curses can be applied to the same person
+- Cursed messages are intercepted and transformed
+- Math curse blocks all messages until equation is solved
+
+## Commands
+
+### Public Commands
+
+```
+/leaderboard [limit]
+```
+View the leaderboard. Optional limit parameter (default: 10)
+
+```
+/curses @member
+```
+View all active curses on a member
+
+### Admin Commands
+
+```
+/give-points @member <points>
+```
+Add points to a member
+
+```
+/remove-points @member <points>
+```
+Remove points from a member
+
+```
+/reset-leaderboard
+```
+Reset all leaderboard data (requires confirmation)
+
+```
+/curse @member <curse_type> <hours>
+```
+Apply a curse to a member for specified duration
+
+```
+/lift-curse @member
+```
+Remove all curses from a member
+
+## Setup
+
+### Requirements
+- Python 3.10+
+- discord.py 2.3.2
+- python-dotenv
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/JellyGirl884/Bleh.git
+   cd Bleh
+   ```
+
+2. **Install dependencies**
    ```bash
    pip install -r requirements.txt
    ```
 
-2. **Create `.env` file:**
+3. **Create `.env` file**
+   ```bash
+   echo "DISCORD_TOKEN=your_token_here" > .env
    ```
-   DISCORD_TOKEN=your_bot_token_here
-   ```
-   
-   > ⚠️ **Never share your bot token!** If you accidentally expose it, regenerate it immediately in the Discord Developer Portal.
 
-3. **Run the bot:**
+4. **Run the bot**
    ```bash
    python main.py
    ```
 
-### 📁 Project Structure
+### Getting Your Discord Token
+
+1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
+2. Click "New Application"
+3. Go to **Bot** section → **Add Bot**
+4. Under **TOKEN**, click "Copy" to get your token
+5. Paste it in your `.env` file
+
+### Inviting the Bot to Your Server
+
+1. Go to **OAuth2** → **URL Generator**
+2. Select scopes: `bot` and `applications.commands`
+3. Select permissions: `Send Messages`, `Read Messages/View Channels`, `Manage Messages`, `Embed Links`
+4. Copy the generated URL and open it in your browser
+
+## Project Structure
 
 ```
-.
-├── main.py              # Bot initialization and cog loader
-├── database.py          # SQLite database manager
-├── curses.py            # Curse types and effects
-├── requirements.txt     # Python dependencies
-├── .env                 # Discord token (add to .gitignore!)
-├── .gitignore           # Git ignore rules
+Bleh/
+├── main.py              # Bot initialization
+├── database.py          # SQLite database management
+├── curses.py            # Curse effects and math problems
 ├── cogs/
-│   ├── __init__.py
 │   ├── leaderboard.py   # Leaderboard commands
-│   └── curses.py        # Curse commands and effects
-└── data/
-    └── leaderboard.db   # SQLite database (auto-created)
+│   └── curses.py        # Curse application and handling
+├── data/
+│   └── leaderboard.db   # SQLite database (auto-created)
+├── requirements.txt     # Python dependencies
+├── .env                 # Discord token (create this)
+├── .gitignore           # Git ignore rules
+└── README.md           # This file
 ```
 
-### 🎮 Usage Examples
+## How It Works
 
-**Adding points:**
+### Leaderboard
+- Points are stored in SQLite database
+- Admins can modify points with commands
+- Leaderboard is sorted by points (highest first)
+- All members visible with medals (🥇🥈🥉)
+
+### Curses
+- When a curse is applied, it's stored with expiration time
+- When cursed user sends a message:
+  - For **math curse**: Message is deleted, user prompted with equation
+  - For **other curses**: Message is deleted, replaced with transformed version
+- Curses auto-expire based on stored timestamp
+- Multiple curses on same user: first curse in system takes priority
+
+## Permissions
+
+- **Leaderboard**: Everyone can view
+- **Points/Reset**: Admin only
+- **Curses**: Admin only to apply/lift
+- **View Curses**: Everyone can check active curses
+
+## Database Schema
+
+### leaderboard table
+```sql
+CREATE TABLE leaderboard (
+    user_id INTEGER PRIMARY KEY,
+    username TEXT NOT NULL,
+    points INTEGER DEFAULT 0,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
 ```
-/give-points @JellyGirl884 50
+
+### curses table
+```sql
+CREATE TABLE curses (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    curse_type TEXT NOT NULL,
+    applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL,
+    is_active INTEGER DEFAULT 1
+)
 ```
 
-**Viewing leaderboard:**
-```
-/leaderboard 20
-```
+## Troubleshooting
 
-**Applying a curse:**
-```
-/curse @Member no_e 6
-```
-(This user cannot use the letter 'e' for 6 hours!)
+### Bot not responding
+- Check Discord token in `.env` file
+- Verify bot has proper permissions in server
+- Check console for error messages
 
-**Solving math curse:**
-```
-/curse @Member math_curse 3
-```
-User must type the answer to a math problem to send any message for 3 hours.
+### Commands not appearing
+- Ensure bot has `applications.commands` scope
+- Restart bot to sync commands
+- Check bot has "Send Messages" permission
 
-### 📝 Available Curse Types
+### Curses not working
+- Verify bot has "Manage Messages" permission
+- Check user has active curses with `/curses @user`
+- Ensure curse hasn't expired
 
-| Curse | Effect |
-|-------|--------|
-| `no_vowels` | Remove all vowels from messages |
-| `no_e` | Cannot use the letter 'e' |
-| `reverse` | Reverse all messages |
-| `morse_code` | Convert messages to morse code |
-| `pig_latin` | Convert to Pig Latin |
-| `uppercase` | Everything is UPPERCASE |
-| `lowercase` | everything is lowercase |
-| `shuffle` | Shuffle words in messages |
-| `stutter` | S-s-stutter on every word |
-| `yoda_speak` | Speak like Yoda you must |
-| `pirate_speak` | Arr, talk like a pirate ye must |
-| `alternating_caps` | AlTeRnAtE cApItAlS |
-| `robotic` | [BEEP BOOP] Speak robotically |
-| `emoji_prefix` | Add emoji before each word |
-| `slowmo` | Add... delays... between... words |
-| `random_caps` | RaNdOmLy MaKe SoMe CaPs |
-| `bubble_text` | Put every word in bubbles |
-| `mirror` | Flip horizontally (reversed mirror) |
-| `math_curse` | Solve math problems to send messages |
-| `double_letter` | Double every letter |
+## License
 
-### ⚙️ Configuration
+Feel free to use and modify this bot!
 
-- **Database location:** `data/leaderboard.db` (auto-created on first run)
-- **Math curse types:** Addition and Multiplication
-- **Curse expiration:** Automatic when duration expires
-- **Multiple curses:** Users can have multiple active curses simultaneously
+## Support
 
-### 🔒 Permissions
-
-- **Leaderboard viewing:** Everyone
-- **Admin commands:** Require Administrator permission in the server
-
-### 📋 Requirements
-
-- Python 3.9+
-- discord.py 2.3.2
-- python-dotenv
-
-### 💡 Tips
-
-- Use `/curses @member` to see remaining time on curses
-- The math curse is the most challenging - use it wisely! 😄
-- Curses automatically expire after the set duration
-- Run `/reset-leaderboard` to start fresh (Admin only)
-
-### 📞 Support
-
-If you encounter issues:
-1. Check that your bot has the required permissions (message management, embed links)
-2. Verify your DISCORD_TOKEN is correct in `.env`
-3. Ensure the bot is in the server you're testing in
-4. Check bot logs for detailed error messages
-
----
-
-Made with ❤️ for Discord
+For issues or questions, create a GitHub issue in this repository.
