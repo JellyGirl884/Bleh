@@ -63,20 +63,24 @@ class CursesCog(commands.Cog):
             if curse_type == "math_curse":
                 problem, answer = generate_math_problem()
                 self.math_curse_problems[member.id] = (problem, answer)
-            
-            embed = discord.Embed(
-                title="🔥 Curse Applied",
-                description=f"Applied **{curse_type}** to {member.mention} for **{hours}** hours",
-                color=discord.Color.red()
-            )
-            embed.add_field(
-                name="Effect",
-                value=get_curse_description(curse_type),
-                inline=False
-            )
-            embed.set_footer(text=f"Expires at {expires_at.strftime('%Y-%m-%d %H:%M:%S')} UTC")
-            
-            await interaction.response.send_message(embed=embed)
+                # Send initial problem
+                await interaction.response.send_message(
+                    f"🔥 Curse applied! {member.mention}, your first problem: **{problem}**",
+                    ephemeral=False
+                )
+            else:
+                embed = discord.Embed(
+                    title="🔥 Curse Applied",
+                    description=f"Applied **{curse_type}** to {member.mention} for **{hours}** hours",
+                    color=discord.Color.red()
+                )
+                embed.add_field(
+                    name="Effect",
+                    value=get_curse_description(curse_type),
+                    inline=False
+                )
+                embed.set_footer(text=f"Expires at {expires_at.strftime('%Y-%m-%d %H:%M:%S')} UTC")
+                await interaction.response.send_message(embed=embed)
         
         except Exception as e:
             await interaction.response.send_message(f"Error applying curse: {str(e)}", ephemeral=True)
@@ -199,10 +203,10 @@ class CursesCog(commands.Cog):
                             )
                             return
                     except ValueError:
-                        # Not a number - ask for answer
+                        # Not a number - delete and ask for answer
                         await message.delete()
                         await message.channel.send(
-                            f"❓ {message.author.mention}, you need to solve this: **{problem}**"
+                            f"❓ {message.author.mention}, solve this: **{problem}**"
                         )
                         return
                 else:
